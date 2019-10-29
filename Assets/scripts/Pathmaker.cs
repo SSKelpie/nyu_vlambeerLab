@@ -9,18 +9,60 @@ using UnityEngine;
 // STEP 1: ======================================================================================
 // put this script on a Sphere... it will move around, and drop a path of floor tiles behind it
 
-public class Pathmaker : MonoBehaviour {
+public class Pathmaker : MonoBehaviour
+{
 
+	private static int counter = 0;
+	public Transform floorPrefab;
+	public Transform pathmakerSpherePrefab;
+	public float num;
+	
+	
 // STEP 2: ============================================================================================
 // translate the pseudocode below
 
 //	DECLARE CLASS MEMBER VARIABLES:
-//	Declare a private integer called counter that starts at 0; 		// counter var will track how many floor tiles I've instantiated
+//	Declare a private integer called counter that starts at 0;
+//// counter var will track how many floor tiles I've instantiated
 //	Declare a public Transform called floorPrefab, assign the prefab in inspector;
-//	Declare a public Transform called pathmakerSpherePrefab, assign the prefab in inspector; 		// you'll have to make a "pathmakerSphere" prefab later
+//	Declare a public Transform called pathmakerSpherePrefab, assign the prefab in inspector;
+//// you'll have to make a "pathmakerSphere" prefab later
 
 
 	void Update () {
+
+		if (counter < 50)
+		{
+			num = Random.Range(0.0f, 1.0f);
+
+			if (num < 0.25f)
+			{
+				transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+			}
+			else if (0.25f >= num && 0.5f <= num) 
+			{
+				transform.rotation = Quaternion.Euler(0f, 0f, -90f);
+			}
+			else if (0.99f >= num && 1.0f <= num)
+			{
+				Instantiate(pathmakerSpherePrefab, transform.position, Quaternion.identity);
+			}
+
+			Instantiate(floorPrefab, transform.position, Quaternion.identity);
+			this.transform.Translate(Vector3.forward*5);
+			counter++;
+		}
+		else
+		{
+			Destroy(floorPrefab);
+		}
+
+		if (counter > 500)
+		{
+			Destroy(floorPrefab);
+		}
+		
+		
 //		If counter is less than 50, then:
 //			Generate a random number from 0.0f to 1.0f;
 //			If random number is less than 0.25f, then rotate myself 90 degrees;
